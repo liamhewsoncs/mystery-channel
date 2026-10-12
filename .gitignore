@@ -1,0 +1,16 @@
+node_modules/
+dist/
+release/
+artifacts/
+*.log
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+coverage/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,64 @@
+{
+  "name": "mystery-channel",
+  "version": "0.2.0",
+  "private": true,
+  "description": "A personal channel that randomizes shows while preserving episode order.",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron . --dev\"",
+    "start": "electron .",
+    "build:renderer": "vite build",
+    "build": "npm run test && npm run typecheck && npm run build:renderer && electron-builder --win nsis",
+    "pretest": "npm rebuild better-sqlite3",
+    "test": "vitest run --globals",
+    "posttest": "electron-rebuild -f -w better-sqlite3",
+    "test:watch": "vitest --globals",
+    "typecheck": "tsc --noEmit",
+    "smoke": "npm run build:renderer && node tests/electron-smoke.cjs",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "chokidar": "^4.0.3",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.2.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.4",
+    "concurrently": "^9.2.1",
+    "electron": "^44.4.5",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.7",
+    "vitest": "^5.0.2",
+    "wait-on": "^8.0.4"
+  },
+  "build": {
+    "appId": "com.mysterychannel.desktop",
+    "productName": "Mystery Channel",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "build/icon.ico",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  }
+}
